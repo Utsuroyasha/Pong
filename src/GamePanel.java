@@ -34,8 +34,11 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void newBall() {
-        //random = new Random();
-        ball = new Ball((GAME_WIDTH / 2) - (BALL_DIAMETER / 2), (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2), BALL_DIAMETER, BALL_DIAMETER);
+        random = new Random(); //adds more difficulty
+        ball = new Ball((GAME_WIDTH / 2) - (BALL_DIAMETER / 2), random.nextInt(GAME_HEIGHT - BALL_DIAMETER / 2), BALL_DIAMETER, BALL_DIAMETER);
+        //(GAME_HEIGHT / 2) - (BALL_DIAMETER / 2) can replaace random
+        //to have ball go straight down y axis: random.nextInt(GAME_HEIGHT / 2) - (BALL_DIAMETER / 2)
+        //the orginal is random.nextInt(GAME_HEIGHT - BALL_DIAMETER)
     }
 
     public void newPaddles() {
@@ -54,6 +57,7 @@ public class GamePanel extends JPanel implements Runnable{
         paddle1.draw(g);
         paddle2.draw(g);
         ball.draw(g);
+        score.draw(g);
     }
 
     public void move() {
@@ -106,7 +110,19 @@ public class GamePanel extends JPanel implements Runnable{
         if (paddle2.y >= (GAME_HEIGHT - PADDLE_HEIGHT)) {
             paddle2.y = GAME_HEIGHT - PADDLE_HEIGHT;
         }
-        
+        //Gives a player 1 point and creates new paddles and ball
+        if (ball.x <= 0) {
+            score.player2++;
+            newPaddles();
+            newBall();
+            System.out.println("Player 2: " + score.player2);
+        }
+        if (ball.x >= GAME_WIDTH - BALL_DIAMETER) {
+            score.player1++;
+            newPaddles();
+            newBall();
+            System.out.println("Player 1: " + score.player1);
+        }
     }
 
     public void run() {
